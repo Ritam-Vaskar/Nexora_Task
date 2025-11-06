@@ -183,13 +183,13 @@ The frontend will run on `http://localhost:5173` (or configured port)
 Use these credentials to test the application:
 
 ### Admin Account
-- **Email**: `admin@vibecommerce.com`
-- **Password**: `admin123`
+- **Email**: `admin@example.com`
+- **Password**: `123456`
 - **Access**: Full admin dashboard, order management, and all user features
 
 ### Regular User Account
-- **Email**: `user@vibecommerce.com`
-- **Password**: `user123`
+- **Email**: `user1@example.com`
+- **Password**: `123456`
 - **Access**: Product browsing, cart, checkout, and order history
 
 **Note**: The database is already seeded with 10 products and these user accounts.
