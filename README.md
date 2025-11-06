@@ -21,7 +21,7 @@ A modern full-stack e-commerce application built with React, Node.js, Express, a
 - React Router for navigation
 - Axios for API calls
 - Vite for build tooling
-- CSS3 for styling
+- Tailwind for styling
 
 ### Backend
 - Node.js
@@ -37,19 +37,18 @@ vibe-commerce/
 ├── backend/
 │   ├── src/
 │   │   ├── config/
-│   │   │   ├── db.js          # Database configuration
-│   │   │   └── seed.js        # Database seeding script
+│   │   │   └── db.js              # MongoDB connection
 │   │   ├── models/
-│   │   │   ├── User.js        # User model
-│   │   │   ├── Product.js     # Product model
-│   │   │   ├── CartItem.js    # Cart item model
-│   │   │   └── Order.js       # Order model
+│   │   │   ├── User.js            # User schema
+│   │   │   ├── Product.js         # Product schema
+│   │   │   ├── CartItem.js        # Cart item schema
+│   │   │   └── Order.js           # Order schema
 │   │   ├── routes/
-│   │   │   ├── authRoutes.js
-│   │   │   ├── productRoutes.js
-│   │   │   ├── cartRoutes.js
-│   │   │   ├── checkoutRoutes.js
-│   │   │   └── adminRoutes.js
+│   │   │   ├── authRoutes.js      # Auth endpoints
+│   │   │   ├── productRoutes.js   # Product endpoints
+│   │   │   ├── cartRoutes.js      # Cart endpoints
+│   │   │   ├── checkoutRoutes.js  # Checkout/Order endpoints
+│   │   │   └── adminRoutes.js     # Admin endpoints
 │   │   ├── controllers/
 │   │   │   ├── authController.js
 │   │   │   ├── productController.js
@@ -57,37 +56,38 @@ vibe-commerce/
 │   │   │   ├── checkoutController.js
 │   │   │   └── adminController.js
 │   │   ├── middleware/
-│   │   │   └── auth.js        # Authentication middleware
-│   │   ├── app.js             # Express app setup
-│   │   └── server.js          # Server entry point
+│   │   │   └── auth.js            # JWT authentication
+│   │   └── server.js              # Server entry point
 │   ├── package.json
 │   └── .env
 │
 ├── frontend/
 │   ├── src/
 │   │   ├── components/
-│   │   │   ├── ProductGrid.jsx
-│   │   │   ├── ProductCard.jsx
-│   │   │   ├── Cart.jsx
-│   │   │   ├── CheckoutForm.jsx
-│   │   │   ├── ReceiptModal.jsx
-│   │   │   ├── Login.jsx
-│   │   │   └── AdminPortal.jsx
+│   │   │   ├── Layout.jsx         # Main layout wrapper
+│   │   │   ├── Navbar.jsx         # Navigation with cart badge
+│   │   │   ├── Modal.jsx          # Reusable modal
+│   │   │   ├── ProtectedRoute.jsx # Route guard
+│   │   │   ├── AdminRoute.jsx     # Admin route guard
+│   │   │   └── ScrollToTop.jsx    # Auto scroll on navigation
 │   │   ├── pages/
-│   │   │   ├── Home.jsx
-│   │   │   ├── CartPage.jsx
-│   │   │   └── CheckoutPage.jsx
-│   │   ├── context/
-│   │   │   ├── AuthContext.jsx
-│   │   │   └── CartContext.jsx
+│   │   │   ├── Home.jsx           # Product listing
+│   │   │   ├── Login.jsx          # Login/Register
+│   │   │   ├── Cart.jsx           # Shopping cart
+│   │   │   ├── Checkout.jsx       # Checkout with receipt modal
+│   │   │   ├── Orders.jsx         # User order history
+│   │   │   └── Admin.jsx          # Admin dashboard
+│   │   ├── contexts/
+│   │   │   ├── AuthContext.jsx    # Auth state management
+│   │   │   └── CartContext.jsx    # Cart state management
 │   │   ├── utils/
-│   │   │   └── api.js         # API client
-│   │   ├── styles/
-│   │   │   └── main.css
-│   │   ├── App.jsx
-│   │   └── index.jsx
+│   │   │   └── api.js             # Axios instance
+│   │   ├── App.jsx                # Main app component
+│   │   ├── main.jsx               # Entry point
+│   │   └── index.css              # Tailwind imports
 │   ├── package.json
 │   ├── vite.config.js
+│   ├── tailwind.config.js
 │   └── index.html
 │
 └── README.md
@@ -115,19 +115,14 @@ npm install
 3. Create a `.env` file in the backend directory:
 ```env
 PORT=5000
-MONGODB_URI=your_mongodb_connection_string
-JWT_SECRET=your_secret_key_here
+MONGODB_URI=mongodb+srv://ritamvaskar0:Ritam%402005@cluster0.5hpn8m5.mongodb.net/vibecommerce
+JWT_SECRET=vibe_commerce_secret_key_2024
 NODE_ENV=development
 ```
 
-4. Seed the database with initial data:
+4. Start the backend server:
 ```bash
-npm run seed
-```
-
-5. Start the backend server:
-```bash
-npm run dev
+node src/server.js
 ```
 
 The backend will run on `http://localhost:5000`
@@ -154,7 +149,7 @@ VITE_API_URL=http://localhost:5000/api
 npm run dev
 ```
 
-The frontend will run on `http://localhost:3000`
+The frontend will run on `http://localhost:5173` (or configured port)
 
 ## API Endpoints
 
@@ -185,31 +180,36 @@ The frontend will run on `http://localhost:3000`
 
 ## Demo Credentials
 
-After running the seed script, use these credentials to login:
+Use these credentials to test the application:
 
 ### Admin Account
-- Email: `admin@vibecommerce.com`
-- Password: `admin123`
+- **Email**: `admin@vibecommerce.com`
+- **Password**: `admin123`
+- **Access**: Full admin dashboard, order management, and all user features
 
 ### Regular User Account
-- Email: `user@vibecommerce.com`
-- Password: `user123`
+- **Email**: `user@vibecommerce.com`
+- **Password**: `user123`
+- **Access**: Product browsing, cart, checkout, and order history
+
+**Note**: The database is already seeded with 10 products and these user accounts.
 
 ## Features Overview
 
 ### For Users:
 1. **Browse Products**: View all available products with images, descriptions, and prices
-2. **Add to Cart**: Add products to cart with quantity selection
-3. **Manage Cart**: Update quantities or remove items from cart
+2. **Add to Cart**: Add products to cart with real-time cart badge counter
+3. **Manage Cart**: Update quantities or remove items with instant updates
 4. **Checkout**: Complete purchase with customer information
-5. **Order Confirmation**: Receive order receipt with details
-6. **View Orders**: Access order history
+5. **Order Confirmation**: Beautiful receipt modal with order details
+6. **View Orders**: Access order history with product images and details
 
 ### For Admins:
-1. **Admin Dashboard**: View statistics and metrics
-2. **Order Management**: View all customer orders
-3. **Order Details**: Access detailed information for each order
-4. **Status Updates**: Update order status (pending/completed/cancelled)
+1. **Admin Dashboard**: View total orders, revenue, and pending orders statistics
+2. **Order Management**: View all customer orders with filtering by status
+3. **Order Details**: View detailed order information including customer details and items
+4. **Status Updates**: Update order status (pending/completed/cancelled) in real-time
+5. **Customer Information**: Access customer name and email for each order
 
 ## Database Models
 
@@ -229,9 +229,9 @@ After running the seed script, use these credentials to login:
 ### Order
 - userId (reference to User)
 - customerName, customerEmail
-- items (array of products with details)
-- total, status
-- timestamps
+- items (array with productId, name, price, quantity, image)
+- total, status (pending/completed/cancelled)
+- timestamps (createdAt, updatedAt)
 
 ## Security Features
 
@@ -243,27 +243,47 @@ After running the seed script, use these credentials to login:
 
 ## Development Notes
 
-- Frontend uses Context API for global state management
+- Frontend uses Context API for global state management (Auth & Cart)
 - Backend follows MVC architecture pattern
-- RESTful API design
+- RESTful API design with consistent response formats
 - Proper error handling and validation
-- Responsive design for mobile and desktop
+- Fully responsive Tailwind CSS design for all screen sizes
+- Auto scroll-to-top on route navigation
+- Cart operations return full cart state for UI consistency
+- Product images stored and displayed in orders
 
-## Future Enhancements
+## Key Implementation Highlights
 
-- Payment gateway integration
-- Product search and filtering
-- User reviews and ratings
-- Product categories and collections
-- Order tracking
-- Email notifications
-- Image upload for products
-- Wishlist functionality
+✅ **Cart Badge Counter**: Real-time cart item count displayed on navbar  
+✅ **Receipt Modal**: Beautiful order confirmation popup after checkout  
+✅ **Order Images**: Product images preserved and displayed in order history  
+✅ **Scroll to Top**: Automatic scroll on page navigation for better UX  
+✅ **Admin Portal**: Complete order management with filtering and status updates  
+✅ **Protected Routes**: Secure authentication with JWT and route guards  
+✅ **Responsive Design**: Tailwind CSS for mobile-first responsive UI  
+✅ **Error Handling**: Comprehensive error messages and loading states  
+
+## Production Deployment
+
+### Backend
+- Ensure MongoDB Atlas connection string is configured
+- Set `NODE_ENV=production` in environment
+- Use process manager like PM2 for production
+
+### Frontend
+- Run `npm run build` to create production build
+- Deploy the `dist` folder to hosting service (Vercel, Netlify, etc.)
+- Update `VITE_API_URL` to production backend URL
 
 ## License
 
-This project is created for Vibe Commerce screening purposes.
+This project is created for educational and demonstration purposes.
 
+## Author
+
+**Ritam Vaskar**  
+GitHub: [@Ritam-Vaskar](https://github.com/Ritam-Vaskar)  
+Repository: [Nexora_Task](https://github.com/Ritam-Vaskar/Nexora_Task)
 ## Contact
 
 For any questions or issues, please contact the development team.
